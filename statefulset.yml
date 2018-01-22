@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: home-deployment
+spec:
+  selector:
+    matchLabels:
+      app: web-nginx
+  serviceName: "my-web"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: web-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+          name: nginx
+        volumeMounts:
+        - name: my-volume-nginx
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: my-volume-nginx
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: my-aws-ebs-gp2
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: my-aws-ebs-gp2
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-app
+spec:
+  selector:
+    app: web-nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: nginx
+  type: LoadBalancer
