@@ -1,19 +1,19 @@
-AWS-Kubernetes : Deploymentn VS StatefulSet
-===========================================
+AWS-Kubernetes : Deployments VS StatefulSets
+============================================
 
 
 In this repository we will discover Deployments and StatefulSets in Kubernetes Cluster and we will undertstand the difference between them.
 
 **Prerequisite :**
 
-To follow this repository you need to get Kubernetes Cluster up and running on AWS.  
-You can setup your Kubernetes Cluster here: https://github.com/ahmedfourti/kubernetes-aws  
-Clone this repository.
+- To follow this repository you need to get Kubernetes Cluster up and running on AWS.  
+  You can setup your Kubernetes Cluster here: https://github.com/ahmedfourti/kubernetes-aws  
+- Clone this repository.
 
 
 **The APP**
 
-We will deploy a simple nginx web server with 3 containers and an Elastic Load Balancer whih will handle incoming traffic.  
+We will deploy a simple nginx web server with 3 containers and an Elastic Load Balancer which will handle incoming traffic.  
 
 
 **First method : Deployment**
@@ -29,8 +29,8 @@ If for some reasons you want to restrict your ELB access to few IPs, you have to
 This must be added on the same level as ```type: LoadBalancer```
 
 Now we can create our app using ```kubectl```  
-```kubetcl apply -f deployment.yml```  
-Wait for 2-3mins and get the ELB hostname from your AWS Console or by typing ```kubetctl describe svc my-app```    
+```kubectl apply -f deployment.yml```  
+Wait for 2-3mins and get the ELB hostname from your AWS Console or by typing ```kubectl describe svc my-app```    
 
 Great!!!! We have a high-available nginx up and running !!    
 As you can see, with only some lines, we got our nginx up behind a managed ELB, that good....!  
@@ -56,9 +56,9 @@ In this example I named my storage class ```my-aws-ebs-gp2``` which is the name 
 > If you don't set the retain policy, it will defaults to delete (this deletes the volume when the pod is terminated)  
 
 Now we can create our app using ```kubectl```  
-```kubetcl apply -f statefulset.yml```  
+```kubectl apply -f statefulset.yml```  
 Wait for 2-3mins and login to the AWS Console to see your new volumes created (Make sure to delete them once done)  
-Or your can also use ```kubetcl get pvc``` and make sure that the status is "Bound"  
+Or your can also use ```kubectl get pvc``` and make sure that the status is "Bound"  
 
 ```
 NAME                                STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS     AGE
